@@ -1,3 +1,6 @@
+// Caminho: lib/data/database_helper.dart
+// ATENÇÃO: Substitua todo o conteúdo do seu arquivo existente por este.
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -25,6 +28,7 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    // Tabela de usuários que já existia
     await db.execute('''
       CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,11 +36,16 @@ class DatabaseHelper {
         password TEXT NOT NULL
       )
     ''');
-  }
 
-  Future<void> close() async {
-    if (_database != null) {
-      await _database!.close();
-    }
+    // NOVA TABELA PARA OS IMÓVEIS
+    await db.execute('''
+      CREATE TABLE properties(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        address TEXT NOT NULL,
+        landlordId INTEGER NOT NULL,
+        FOREIGN KEY (landlordId) REFERENCES users (id) ON DELETE CASCADE
+      )
+    ''');
   }
 }

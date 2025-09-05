@@ -1,6 +1,10 @@
+// Caminho: lib/pages/auth/login_page.dart
+// ATENÇÃO: Mova seu arquivo login_page.dart para esta pasta e substitua o conteúdo.
+
 import 'package:flutter/material.dart';
 import 'package:gestao_aluguel/data/user_repository.dart';
-import 'package:gestao_aluguel/pages/register_page.dart';
+import 'package:gestao_aluguel/pages/auth/register_page.dart';
+import 'package:gestao_aluguel/pages/landlord/landlord_dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        // Adicionado para permitir rolagem
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -124,11 +127,12 @@ class _LoginPageState extends State<LoginPage> {
 
         if (mounted) {
           if (isValid) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login realizado com sucesso!')),
+            // NAVEGAR PARA O DASHBOARD DO PROPRIETÁRIO!
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LandlordDashboardPage()),
             );
-            // Navegar para a página principal após o login
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Email ou senha inválidos')),
