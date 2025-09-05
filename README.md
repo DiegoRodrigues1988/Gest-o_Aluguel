@@ -1,16 +1,3 @@
 # gestao_aluguel
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Esse projeto Gestão de Aluguel foi pensado em proprietários e inquilinos, para que no seu dia a dia possam ter mais liberdade em não se preocupar com a data e valores, pois a app a de lembrar como aquela velha e boa agenda que muito se usava. Todavia, a relação entre o proprietário e inquilino poderá ser diretamente interligada neste app, é lógico que se tem o Watssap, mas as vezes, as pessoas não querem incomodar e deixar a pessoa mais a vontade para ver a hora que quiser as informações que ambos podem querer expressar. Agora, é claro que para cada tipo de assunto há uma prioridade, mas esse app é feito para trazer mais conforto e tranquilidade aos usuários. Ou assim esperamos.
