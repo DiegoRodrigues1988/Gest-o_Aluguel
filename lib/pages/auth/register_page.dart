@@ -1,5 +1,3 @@
-// Caminho: lib/pages/auth/register_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:gestao_aluguel/data/user_repository.dart';
 import 'package:gestao_aluguel/models/user.dart';

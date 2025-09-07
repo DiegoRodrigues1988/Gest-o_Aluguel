@@ -1,5 +1,4 @@
 // Caminho: lib/data/database_helper.dart
-// ATENÇÃO: Substitua todo o conteúdo do seu arquivo existente por este.
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -37,12 +36,14 @@ class DatabaseHelper {
       )
     ''');
 
-    // NOVA TABELA PARA OS IMÓVEIS
+    // TABELA DE IMÓVEIS CORRIGIDA (com todos os campos)
     await db.execute('''
       CREATE TABLE properties(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         address TEXT NOT NULL,
+        description TEXT,
+        status TEXT NOT NULL,
         landlordId INTEGER NOT NULL,
         FOREIGN KEY (landlordId) REFERENCES users (id) ON DELETE CASCADE
       )

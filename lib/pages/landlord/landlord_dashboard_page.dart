@@ -1,6 +1,9 @@
 // Caminho: lib/pages/landlord/landlord_dashboard_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:gestao_aluguel/pages/auth/login_page.dart';
+import 'package:gestao_aluguel/pages/landlord/property_list_page.dart';
+import 'package:gestao_aluguel/pages/landlord/add_edit_property_page.dart';
 
 class LandlordDashboardPage extends StatefulWidget {
   const LandlordDashboardPage({super.key});
@@ -20,7 +23,6 @@ class _LandlordDashboardPageState extends State<LandlordDashboardPage> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Navega de volta para a tela de login
               Navigator.of(context).pushReplacementNamed('/login');
             },
           ),
@@ -35,7 +37,10 @@ class _LandlordDashboardPageState extends State<LandlordDashboardPage> {
             title: 'Meus Imóveis',
             subtitle: 'Visualize e adicione novos imóveis',
             onTap: () {
-              // Ação futura: Navegar para a lista de imóveis
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const PropertyListPage()),
+              );
             },
           ),
           const SizedBox(height: 16),
@@ -45,7 +50,7 @@ class _LandlordDashboardPageState extends State<LandlordDashboardPage> {
             title: 'Inquilinos',
             subtitle: 'Gerencie seus inquilinos e contratos',
             onTap: () {
-              // Ação futura: Navegar para a lista de inquilinos
+              // Ação futura
             },
           ),
           const SizedBox(height: 16),
@@ -55,18 +60,24 @@ class _LandlordDashboardPageState extends State<LandlordDashboardPage> {
             title: 'Financeiro',
             subtitle: 'Acompanhe pagamentos e relatórios',
             onTap: () {
-              // Ação futura: Navegar para a área financeira
+              // Ação futura
             },
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Ação futura: Navegar para a tela de adicionar novo imóvel
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              // CORREÇÃO: Removido o 'const' daqui
+              builder: (context) => AddEditPropertyPage(),
+            ),
+          );
         },
         label: const Text('Novo Imóvel'),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
     );
   }

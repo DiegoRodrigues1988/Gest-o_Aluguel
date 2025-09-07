@@ -1,10 +1,6 @@
-// Caminho: lib/pages/auth/login_page.dart
-// ATENÇÃO: Mova seu arquivo login_page.dart para esta pasta e substitua o conteúdo.
-
 import 'package:flutter/material.dart';
 import 'package:gestao_aluguel/data/user_repository.dart';
 import 'package:gestao_aluguel/pages/auth/register_page.dart';
-import 'package:gestao_aluguel/pages/landlord/landlord_dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login'),
         backgroundColor: Colors.blue,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -37,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 40),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
@@ -87,11 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
                           minimumSize: const Size(double.infinity, 50),
                         ),
                         child: const Text(
                           'Entrar',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ),
                 const SizedBox(height: 20),
@@ -127,12 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 
         if (mounted) {
           if (isValid) {
-            // NAVEGAR PARA O DASHBOARD DO PROPRIETÁRIO!
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const LandlordDashboardPage()),
-            );
+            Navigator.pushReplacementNamed(context, '/dashboard');
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Email ou senha inválidos')),
