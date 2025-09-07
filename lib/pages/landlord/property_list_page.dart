@@ -1,9 +1,9 @@
 // Caminho: lib/pages/landlord/property_list_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:gestao_aluguel/data/property_repository.dart';
 import 'package:gestao_aluguel/models/property.dart';
 import 'package:gestao_aluguel/pages/landlord/add_edit_property_page.dart';
+import 'package:gestao_aluguel/pages/landlord/property_details_page.dart';
 
 class PropertyListPage extends StatefulWidget {
   const PropertyListPage({super.key});
@@ -24,7 +24,8 @@ class _PropertyListPageState extends State<PropertyListPage> {
 
   void _loadProperties() {
     setState(() {
-      // ATENÇÃO: ID do proprietário fixo por enquanto.
+      // ATENÇÃO: ID do proprietário fixo (ex: 1).
+      // Em um app real, pegaria do usuário logado.
       _propertiesFuture = _repository.getPropertiesForLandlord(1);
     });
   }
@@ -35,8 +36,6 @@ class _PropertyListPageState extends State<PropertyListPage> {
         builder: (context) => AddEditPropertyPage(property: property),
       ),
     );
-
-    // Se o resultado for 'true', significa que algo foi salvo e a lista precisa ser atualizada.
     if (result == true) {
       _loadProperties();
     }
@@ -45,7 +44,6 @@ class _PropertyListPageState extends State<PropertyListPage> {
   void _deleteProperty(int id) async {
     try {
       await _repository.deleteProperty(id);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Imóvel deletado com sucesso!')),
@@ -93,23 +91,20 @@ class _PropertyListPageState extends State<PropertyListPage> {
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PropertyDetailsPage(property: property),
+                      ),
+                    ).then((_) => _loadProperties());
+                  },
                   title: Text(
                     property.name,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(property.address),
-                      Chip(
-                        label: Text(property.status),
-                        backgroundColor: property.status == 'Disponível'
-                            ? Colors.green.shade100
-                            : Colors.orange.shade100,
-                      )
-                    ],
-                  ),
-                  isThreeLine: true,
+                  subtitle: Text(property.address),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

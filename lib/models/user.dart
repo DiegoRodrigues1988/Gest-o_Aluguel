@@ -1,5 +1,6 @@
+// Caminho: lib/models/user.dart
 class User {
-  int? id;
+  final int? id;
   final String email;
   final String password;
 

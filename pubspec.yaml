@@ -10,9 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
   
-  # Pacotes para banco de dados local
+  # Banco de dados local
   sqflite: ^2.3.3+1
   path: ^1.9.0
+  
+  # Para formatação de datas
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

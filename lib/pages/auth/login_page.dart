@@ -1,6 +1,8 @@
+// Caminho: lib/pages/auth/login_page.dart
 import 'package:flutter/material.dart';
 import 'package:gestao_aluguel/data/user_repository.dart';
 import 'package:gestao_aluguel/pages/auth/register_page.dart';
+import 'package:gestao_aluguel/models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,145 +16,91 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _userRepository = UserRepository();
-
-  bool _obscurePassword = true;
   bool _isLoading = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 40),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Senha',
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite sua senha';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 30),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(double.infinity, 50),
-                        ),
-                        child: const Text(
-                          'Entrar',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterPage()),
-                    );
-                  },
-                  child: const Text('Não tem uma conta? Cadastre-se'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
 
-      try {
-        final isValid = await _userRepository.validateUser(
-          _emailController.text,
-          _passwordController.text,
-        );
+    try {
+      final user = await _userRepository.validateUser(
+        _emailController.text,
+        _passwordController.text,
+      );
 
-        if (mounted) {
-          if (isValid) {
-            Navigator.pushReplacementNamed(context, '/dashboard');
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Email ou senha inválidos')),
-            );
-          }
-        }
-      } catch (e) {
-        if (mounted) {
+      if (mounted) {
+        if (user != null) {
+          // <-- A CORREÇÃO ESTÁ AQUI
+          Navigator.pushReplacementNamed(context, '/dashboard',
+              arguments: user);
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao fazer login: $e')),
+            const SnackBar(content: Text('Email ou senha inválidos')),
           );
         }
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao fazer login: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email)),
+                keyboardType: TextInputType.emailAddress,
+                validator: (v) => v!.isEmpty ? 'Campo obrigatório' : null,
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                    labelText: 'Senha',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock)),
+                obscureText: true,
+                validator: (v) => v!.isEmpty ? 'Campo obrigatório' : null,
+              ),
+              const SizedBox(height: 30),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text('Entrar'),
+                    ),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const RegisterPage())),
+                child: const Text('Não tem uma conta? Cadastre-se'),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

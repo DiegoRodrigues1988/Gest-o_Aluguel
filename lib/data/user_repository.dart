@@ -1,3 +1,4 @@
+// Caminho: lib/data/user_repository.dart
 import 'package:gestao_aluguel/models/user.dart';
 import 'package:gestao_aluguel/data/database_helper.dart';
 
@@ -23,13 +24,11 @@ class UserRepository {
     return null;
   }
 
-  Future<bool> validateUser(String email, String password) async {
+  Future<User?> validateUser(String email, String password) async {
     final user = await getUserByEmail(email);
-    return user != null && user.password == password;
-  }
-
-  Future<bool> emailExists(String email) async {
-    final user = await getUserByEmail(email);
-    return user != null;
+    if (user != null && user.password == password) {
+      return user;
+    }
+    return null;
   }
 }
